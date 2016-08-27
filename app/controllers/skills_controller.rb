@@ -26,7 +26,12 @@ class SkillsController < ApplicationController
     end
 
     def destroy
-        @skill.destroy
+        @user.skills.each { |skill|
+            if( skill.id == params[:id].to_i ) 
+                skill.destroy
+                break
+            end
+        }
         render json: { message: "Skill deletada" }, status: 200
     end
 
@@ -41,7 +46,7 @@ class SkillsController < ApplicationController
             end
         end
     rescue Exception => e 
-        render json: e.message, status: 400
+        render json: { errors: [ e.message ] }, status: 400
     end
 
     private

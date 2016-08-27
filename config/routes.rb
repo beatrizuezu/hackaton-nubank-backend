@@ -6,10 +6,16 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :skills
+    resources :missions do
+      resources :tasks
+    end
   end
 
   resources :users do
     resources :skills
+    resources :missions do
+      resources :tasks
+    end
   end
 
 end

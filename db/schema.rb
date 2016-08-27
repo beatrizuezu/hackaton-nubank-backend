@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160827223659) do
+ActiveRecord::Schema.define(version: 20160827232515) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "missions", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.string   "goal"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.decimal  "value"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["user_id"], name: "index_missions_on_user_id", using: :btree
+  end
 
   create_table "skill_users", force: :cascade do |t|
     t.integer  "skill_id"
@@ -30,6 +43,22 @@ ActiveRecord::Schema.define(version: 20160827223659) do
     t.text     "description"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string   "category"
+    t.text     "description"
+    t.decimal  "value"
+    t.integer  "xp"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string   "prize"
+    t.boolean  "accepted"
+    t.integer  "mission_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "title"
+    t.index ["mission_id"], name: "index_tasks_on_mission_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
