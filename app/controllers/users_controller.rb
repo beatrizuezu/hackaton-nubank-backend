@@ -1,4 +1,9 @@
 class UsersController < ApplicationController
+    before_action :set_user, only: [:create, :show, :update, :destroy]
+
+    def index
+        render json: User.all, include: [missions: { include: [:tasks] } ] , status: 200
+    end
 
     def logged_user
         if current_user
@@ -20,6 +25,18 @@ class UsersController < ApplicationController
                 }
             }, status: 200
         end
+    end
+
+    def show
+        if @user
+            render json: @user, include: [missions: { include: [:tasks] } ] , status: 200
+        end
+    end
+
+    private
+
+    def set_user
+      @user = User.includes(:skills).find(params[:id])
     end
 
 end

@@ -1,5 +1,6 @@
 class MissionsController < ApplicationController
     before_action :set_user, only: [:index, :create, :show, :update, :destroy]
+    before_action :set_mission, only: [:show]
 
     def index
         if params[:user_id]
@@ -12,7 +13,9 @@ class MissionsController < ApplicationController
     end
 
     def show
-  
+        if @mission
+            render json: @mission, include: [:tasks] , status: 200
+        end
     end
 
     def update
@@ -57,5 +60,9 @@ class MissionsController < ApplicationController
 
     def set_user
       @user = User.includes(:missions).find(params[:user_id])
+    end
+
+    def set_mission
+      @mission = Mission.includes(:tasks).find(params[:id])
     end
 end

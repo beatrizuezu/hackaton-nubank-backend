@@ -1,10 +1,12 @@
 class TasksController < ApplicationController
     before_action :set_user, only: [:index, :create, :show, :update, :destroy]
+    before_action :set_mission, only: [:index, :create, :show, :update, :destroy]
 
     def index
         if params[:user_id]
-            if @user
-                render json: @user, include: [:missions] , status: 200
+            @task = Task.where(mission_id: params[:mission_id])
+            if @task
+                render json: @task , status: 200
             else
                 render json: { errors: [ "Usuario não existe" ] }, status: 400
             end
@@ -57,5 +59,9 @@ class TasksController < ApplicationController
 
     def set_user
       @user = User.includes(:missions).find(params[:user_id])
+    end
+
+    def set_mission
+      @mission = Mission.includes(:tasks).find(params[:mission_id])
     end
 end
