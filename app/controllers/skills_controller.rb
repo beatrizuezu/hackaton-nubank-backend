@@ -1,27 +1,18 @@
 class SkillsController < ApplicationController
-    before_action :set_skill, only: [:show, :update, :destroy]
+    before_action :set_user, only: [:index, :create, :show, :update, :destroy]
 
     def index
         if params[:user_id]
-            @user = User.find(params[:user_id])
-            render json: {
-                data:{
-                    skills: @user.skills
-                }
-            }, status: 200
-        else
-            render json: Skill.all, status: 200
+            if @user
+                render json: @user, include: [:skills] , status: 200
+            else
+                render json: { errors: [ "Usuario não existe" ] }, status: 400
+            end
         end
     end
 
     def show
-        if params[:id]
-            if @skill
-                render json: @skill, status: 200
-            else
-                render json: { errors: [ "Skill não existe" ] }, status: 400
-            end
-        end
+  
     end
 
     def update
@@ -40,24 +31,17 @@ class SkillsController < ApplicationController
     end
 
     def create
-        if params[:user_id] 
-            @user = User.find(params[:user_id])
-            render json: {
-                data: {
-                    skills: @user.skills
-                }
-            }, status: 200
-        end
-
-        if params[:skill] 
-            @skill = Skill.new(skill_params)
-
-            if @skill.save
-                render json: @skill, status: 200
+        if params[:user_id] && params[:skill]
+            @skill = Skill.find(params[:skill][:id])
+            @user.skills << @skill
+            if @user.save
+                render json: @user, include: [:skills], status: 200
             else
-                render json: @skill.errors, status: :unprocessable_entity
+                render json: @user.errors, status: :unprocessable_entity
             end
         end
+    rescue Exception => e 
+        render json: e.message, status: 400
     end
 
     private
@@ -66,7 +50,7 @@ class SkillsController < ApplicationController
         params.require(:skill).permit(:id, :name, :description)
     end
 
-    def set_skill
-      @skill = Skill.find(params[:id])
+    def set_user
+      @user = User.includes(:skills).find(params[:user_id])
     end
 end

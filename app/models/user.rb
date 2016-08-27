@@ -5,5 +5,6 @@ class User < ActiveRecord::Base
           :omniauthable
   include DeviseTokenAuth::Concerns::User
 
-  has_and_belongs_to_many :skills
+  has_many :skills, through: :skill_users
+  has_many :skill_users
 end

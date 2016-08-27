@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   get '/logged_user', to: 'user#logged_user'
 
-  resources :skills
+  namespace :admin do
+    resources :skills
+  end
 
   resources :users do
     resources :skills
