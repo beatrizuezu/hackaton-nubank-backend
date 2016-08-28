@@ -68,7 +68,7 @@ class Admin::MissionsController < ApplicationController
                         description: mission.name, 
                         accepted: true, 
                         value: value_divide.round(2),
-                        xp: 10,
+                        xp: 10 * counter,
                         start_date: start_date,
                         end_date: end_date,
                         completed: false
