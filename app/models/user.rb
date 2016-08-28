@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules.
+  attr_accessor :total_xp, :has_mission
+
   devise :database_authenticatable, :registerable,
           :recoverable, :rememberable, :trackable, :validatable,
           :omniauthable
@@ -15,4 +17,20 @@ class User < ActiveRecord::Base
 
   belongs_to :role, optional: true
   has_one :mentor, class_name: "User", foreign_key: :mentor_id
+
+  def total_xp
+    total = 0
+      self.missions.each{ |mission|
+        mission.tasks.each { |task|
+          if task.completed
+            total = total + task.xp
+          end
+        }
+      }
+      total
+  end
+
+  def has_mission
+    self.missions.count > 0
+  end
 end
