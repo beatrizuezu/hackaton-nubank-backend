@@ -5,7 +5,7 @@ class MissionsController < ApplicationController
     def index
         if params[:user_id]
             if @user
-                render json: @user, include: [:missions] , status: 200
+                render json: @user, include: [missions: { include: [:tasks] } ]  , status: 200
             else
                 render json: { errors: [ "Usuario não existe" ] }, status: 400
             end
