@@ -44,7 +44,7 @@ class Admin::TasksController < ApplicationController
     private
 
     def task_params
-        params.require(:task).permit(:id, :title, :description, :goal, :start_date, :end_date, :value, :xp, :mission_id, :prize)
+        params.require(:task).permit(:id, :title, :description, :goal, :start_date, :end_date, :value, :xp, :mission_id, :prize, :completed)
     end
 
     def set_task
