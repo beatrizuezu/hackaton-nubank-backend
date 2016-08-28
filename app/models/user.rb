@@ -7,6 +7,9 @@ class User < ActiveRecord::Base
 
   has_many :skills, through: :skill_users
   has_many :skill_users
+
+  has_many :messages, through: :message_users
+  has_many :message_users
   
   has_many :missions
 end
