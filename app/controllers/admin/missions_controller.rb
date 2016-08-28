@@ -34,7 +34,9 @@ class Admin::MissionsController < ApplicationController
         if params[:mission] 
             @mission = Mission.new(mission_params)
             if @mission.save
-                render json: @mission, status: 200
+                create_tasks(@mission, params[:mission][:duration_month])
+            
+                render json: @mission, include: [ :tasks, :messages ], status: 200
             else
                 render json: @mission.errors, status: :unprocessable_entity
             end
@@ -49,5 +51,29 @@ class Admin::MissionsController < ApplicationController
 
     def set_mission
       @mission = Mission.find(params[:id])
+    end
+
+     def create_tasks( mission, months )
+        limit = months.to_i + 1
+
+        puts "create #{months} #{limit} #{(mission.value.to_f / months.to_i).round(2)} #{mission.value.to_f} #{mission.id}"
+        value_divide = mission.value.to_f / limit
+
+        for counter in 1..limit
+            end_date = DateTime.now + counter.month
+            start_date = end_date - 1.month
+
+            mission.tasks.new({
+                        category: "mission", 
+                        description: mission.name, 
+                        accepted: true, 
+                        value: value_divide.round(2),
+                        xp: 10,
+                        start_date: start_date,
+                        end_date: end_date,
+                        completed: false
+                    })
+            mission.save
+        end
     end
 end

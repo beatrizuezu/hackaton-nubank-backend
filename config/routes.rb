@@ -8,7 +8,8 @@ Rails.application.routes.draw do
     resources :skills
     resources :roles
     resources :users
-
+    resources :tasks
+    
     resources :missions do
       resources :tasks
     end
