@@ -17,8 +17,10 @@ class Admin::UsersController < ApplicationController
 
     def update
         if params[:id] 
-            @skill = Skill.find(params[:user][:skill_id])
-            @user.skills << @skill
+            if params[:user][:skill_id]
+                @skill = Skill.find(params[:user][:skill_id])
+                @user.skills << @skill
+            end 
             if @user.update(user_params)
                 render json: @user, include: [:skills, :missions], methods: [:total_xp, :has_mission], status: 200
             else

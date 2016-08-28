@@ -23,7 +23,7 @@ class User < ActiveRecord::Base
       self.missions.each{ |mission|
         mission.tasks.each { |task|
           if task.completed
-            total = total + task.xp
+            total = total + task.xp.to_i
           end
         }
       }
