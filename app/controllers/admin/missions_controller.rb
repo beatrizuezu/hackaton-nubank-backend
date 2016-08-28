@@ -2,13 +2,13 @@ class Admin::MissionsController < ApplicationController
     before_action :set_mission, only: [:show, :update, :destroy]
 
     def index
-        render json: Mission.all, status: 200
+        render json: Mission.all, include: [ :tasks, :messages ], status: 200
     end
 
     def show
         if params[:id]
             if @mission
-                render json: @mission, status: 200
+                render json: @mission, include: [ :tasks, :messages ], status: 200
             else
                 render json: { errors: [ "Mission não existe" ] }, status: 400
             end

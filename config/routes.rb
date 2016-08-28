@@ -6,8 +6,14 @@ Rails.application.routes.draw do
 
   namespace :admin do
     resources :skills
+    resources :roles
+    resources :users
+
     resources :missions do
       resources :tasks
+    end
+    resources :messages do
+      resources :users
     end
   end
 
@@ -16,6 +22,7 @@ Rails.application.routes.draw do
     resources :missions do
       resources :tasks
     end
+    resources :messages
   end
 
 end

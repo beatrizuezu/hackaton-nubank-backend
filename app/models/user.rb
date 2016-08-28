@@ -12,4 +12,7 @@ class User < ActiveRecord::Base
   has_many :message_users
   
   has_many :missions
+
+  belongs_to :role, optional: true
+  has_one :mentor, class_name: "User", foreign_key: :mentor_id
 end
