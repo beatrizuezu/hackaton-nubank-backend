@@ -2,7 +2,7 @@ class UsersController < ApplicationController
     before_action :set_user, only: [:create, :show, :update, :destroy]
 
     def index
-        render json: User.all, include: [missions: { include: [:tasks] } ] , status: 200
+        render json: User.all, methods: [:total_xp, :has_mission], include: [missions: { include: [:tasks] } ] , status: 200
     end
 
     def logged_user
@@ -29,7 +29,7 @@ class UsersController < ApplicationController
 
     def show
         if @user
-            render json: @user, include: [missions: { include: [:tasks] } ] , status: 200
+            render json: @user, include: [missions: { include: [:tasks] } ], methods: [:total_xp, :has_mission] , status: 200
         end
     end
 
