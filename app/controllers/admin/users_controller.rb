@@ -2,13 +2,13 @@ class Admin::UsersController < ApplicationController
     before_action :set_user, only: [:show, :update, :destroy]
 
     def index
-        render json: User.all, methods: [:total_xp, :has_mission], status: 200
+        render json: User.all, include: [:skills, :missions], methods: [:total_xp, :has_mission], status: 200
     end
 
     def show
         if params[:id]
             if @user
-                render json: @user, methods: [:total_xp, :has_mission], status: 200
+                render json: @user, include: [:skills, :missions], methods: [:total_xp, :has_mission], status: 200
             else
                 render json: { errors: [ "User não existe" ] }, status: 400
             end
@@ -17,8 +17,10 @@ class Admin::UsersController < ApplicationController
 
     def update
         if params[:id] 
+            @skill = Skill.find(params[:user][:skill_id])
+            @user.skills << @skill
             if @user.update(user_params)
-                render json: @user, methods: [:total_xp, :has_mission], status: 200
+                render json: @user, include: [:skills, :missions], methods: [:total_xp, :has_mission], status: 200
             else
                 render json: @user.errors, status: :unprocessable_entity
             end
